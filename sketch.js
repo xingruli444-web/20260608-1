@@ -46,6 +46,10 @@ async function initializeMediaPipe() {
     }
   };
 
+  video.playsInline = true;
+  video.muted = true;
+  video.addEventListener('loadedmetadata', resizeCanvas);
+
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'user' },
@@ -53,6 +57,8 @@ async function initializeMediaPipe() {
     });
     video.srcObject = stream;
     await video.play();
+    resizeCanvas();
+    updateStatus('相機已啟動，請移動手部');
   } catch (err) {
     alert('相機啟動失敗: ' + err.message);
     updateStatus('相機初始化失敗');
@@ -103,6 +109,8 @@ function onHandsResults(results) {
       bladeTrail.shift();
     }
 
+    updateStatus('偵測到手部，請移動食指切水果');
+
     if (!isGameOver) {
       checkCollisions(tx, ty);
     }
@@ -114,6 +122,10 @@ function onHandsResults(results) {
 }
 
 function spawnFruit() {
+  if (!canvasElement.width || !canvasElement.height) {
+    return;
+  }
+
   const x = Math.random() * (canvasElement.width - 80) + 40;
   const y = canvasElement.height + 30;
   const vx = (Math.random() - 0.5) * 4;
@@ -220,6 +232,15 @@ function drawScene() {
       canvasCtx.lineTo(bladeTrail[i].x, bladeTrail[i].y);
     }
     canvasCtx.stroke();
+    canvasCtx.restore();
+  }
+
+  if (currentFingerPos) {
+    canvasCtx.save();
+    canvasCtx.fillStyle = 'rgba(0, 255, 255, 0.9)';
+    canvasCtx.beginPath();
+    canvasCtx.arc(currentFingerPos.x, currentFingerPos.y, 8, 0, Math.PI * 2);
+    canvasCtx.fill();
     canvasCtx.restore();
   }
 
