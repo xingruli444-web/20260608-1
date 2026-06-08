@@ -18,7 +18,7 @@ let isGameOver = false;
 let fruits = [];
 const gravity = 0.15; // 重力加速度
 let lastSpawnTime = 0;
-const spawnInterval = 1200; // 每 1.2 秒生成一個水果
+const spawnInterval = 1500; // 每 1.5 秒生成一個水果
 
 // 刀芒特效 (追蹤食指尖)
 let bladeTrail = [];
@@ -153,7 +153,7 @@ function checkCollisions(tx, ty) {
       if (dist < fruit.radius) {
         fruit.isSliced = true;
         score += 10;
-        updateStatus(`切中了！目前分數：`);
+        updateStatus(`切中了！目前分數：${score}`);
       }
     }
   }
@@ -253,12 +253,12 @@ function drawUI() {
   canvasCtx.fillStyle = '#FFFFFF';
   canvasCtx.font = 'bold 24px Arial';
   canvasCtx.textAlign = 'left';
-  canvasCtx.fillText(`分數: `, 20, 40);
+  canvasCtx.fillText(`分數: ${score}`, 20, 40);
 
   canvasCtx.textAlign = 'right';
   let hearts = '';
   for (let i = 0; i < 3; i++) {
-    hearts += i < lives ? '❤️ ' : '🖤 ';
+    hearts += i < Math.max(0, lives) ? '❤️ ' : '🖤 ';
   }
   canvasCtx.fillText(hearts, canvasElement.width - 20, 40);
 }
@@ -274,13 +274,18 @@ function triggerGameOver() {
 
 function showEndScreen(finalScore) {
   endTitle.textContent = '遊戲結束！';
-  winsCountEl.textContent = finalScore; // 借用原有的 ID 顯示分數
-  // 隱藏原本的統計文字
-  document.querySelectorAll('#endScreen p').forEach(p => {
-    if (p.textContent.includes('敗') || p.textContent.includes('平')) {
-      p.style.display = 'none';
+  const scoreLabel = document.querySelector('#winsCount')?.previousElementSibling;
+  if (scoreLabel) {
+    scoreLabel.textContent = '最終得分';
+  }
+  winsCountEl.textContent = finalScore; // 顯示最終得分
+
+  document.querySelectorAll('#endScreen .score-card').forEach((card, index) => {
+    if (index > 0) {
+      card.style.display = 'none';
     }
   });
+
   endScreen.classList.remove('hidden');
 }
 
