@@ -100,7 +100,7 @@ function onHandsResults(results) {
   if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
     const landmarks = results.multiHandLandmarks[0];
     const tip = landmarks[8];
-    const tx = (1 - tip.x) * canvasElement.width;
+    const tx = tip.x * canvasElement.width;
     const ty = tip.y * canvasElement.height;
 
     currentFingerPos = { x: tx, y: ty };
