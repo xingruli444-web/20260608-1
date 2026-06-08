@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaPipe 手部追蹤</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <body>
+    <!-- 主容器 -->
+    <div class="container">
+      <!-- 視訊和畫布容器 -->
+      <div class="video-container">
+        <video id="video" class="video-element"></video>
+        <canvas id="canvas" class="overlay-canvas"></canvas>
+      </div>
+
+      <!-- UI 區塊 -->
+      <div class="ui-panel">
+        <div class="status-section">
+          <h2>偵測狀態</h2>
+          <div class="status-display">
+            <span id="status" class="status-text">初始化中...</span>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <h3>鎖定進度</h3>
+          <div class="progress-bar-container">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <span id="progressText" class="progress-text">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 遊戲結果彈出選單 -->
+    <div id="resultModal" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="resultTitle">遊戲完成</h2>
+        <p id="resultMessage">請以手勢選擇下一步動作。</p>
+        <div class="modal-buttons">
+          <button id="restartBtn" class="btn btn-primary">繼續下一局</button>
+          <button id="closeBtn" class="btn btn-secondary">關閉</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 結束畫面 -->
+    <div id="endScreen" class="end-screen hidden">
+      <div class="end-screen-content">
+        <h1 id="endTitle">感謝遊戲！</h1>
+        <div class="score-grid">
+          <div class="score-card">
+            <span class="score-label">勝場</span>
+            <strong id="winsCount">0</strong>
+          </div>
+          <div class="score-card">
+            <span class="score-label">敗場</span>
+            <strong id="lossesCount">0</strong>
+          </div>
+          <div class="score-card">
+            <span class="score-label">平手</span>
+            <strong id="tiesCount">0</strong>
+          </div>
+        </div>
+        <button id="playAgainBtn" class="btn btn-primary">重新開始遊戲</button>
+      </div>
+    </div>
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="sketch.js"></script>
+  </body>
+</html>
